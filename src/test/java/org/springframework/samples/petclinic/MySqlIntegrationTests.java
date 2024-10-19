@@ -37,7 +37,10 @@ import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT,
+		properties = { "langchain4j.open-ai.chat-model.api-key=FAKE_KEY",
+				"langchain4j.azure-open-ai.chat-model.api-key=FAKE_KEY",
+				"langchain4j.azure-open-ai.chat-model.endpoint=FAKE_ENDPOINT" })
 @ActiveProfiles("mysql")
 @Testcontainers(disabledWithoutDocker = true)
 @DisabledInNativeImage

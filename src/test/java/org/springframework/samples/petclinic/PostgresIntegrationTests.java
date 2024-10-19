@@ -47,8 +47,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 import org.testcontainers.DockerClientFactory;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = { "spring.docker.compose.skip.in-tests=false", //
-		"spring.docker.compose.profiles.active=postgres" })
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT,
+		properties = { "spring.docker.compose.skip.in-tests=false", "spring.docker.compose.profiles.active=postgres",
+				"langchain4j.open-ai.chat-model.api-key=FAKE_KEY",
+				"langchain4j.azure-open-ai.chat-model.api-key=FAKE_KEY",
+				"langchain4j.azure-open-ai.chat-model.endpoint=FAKE_ENDPOINT" })
 @ActiveProfiles("postgres")
 @DisabledInNativeImage
 public class PostgresIntegrationTests {

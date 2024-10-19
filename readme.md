@@ -1,30 +1,27 @@
-# Spring PetClinic Sample Application [![Build Status](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml/badge.svg)](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml)
+# GenAI Spring PetClinic Sample Application build with LangChain4j [![Build Status](https://github.com/spring-petclinic/spring-petclinic-langchain4j/actions/workflows/maven-build.yml/badge.svg)](https://github.com/spring-petclinic-langchain4jc/actions/workflows/maven-build.yml)
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/spring-projects/spring-petclinic) [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=7517918)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/spring-petclinic/spring-petclinic-langchain4j) [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=7517918)
 
-## Understanding the Spring Petclinic AI application
+## Understanding the Spring Petclinic LangChain4j application
 
-Thanks to the work of [Oded Shopen](https://github.com/odedia), a chatbot using **Generative AI** has been added to the famous Spring Petclinic application.
-This fork uses the **[Spring AI project](https://spring.io/projects/spring-ai)** and currently supports **OpenAI** or **Azure's OpenAI** as the **LLM provider**. This is a fork from the `spring-ai` branch of the `spring-petclinic` repo available [here](https://github.com/spring-projects/spring-petclinic/tree/spring-ai).
-
-Oded described his approach in those 2 blog posts: 
-* [AI Meets Spring Petclinic: Implementing an AI Assistant with Spring AI (Part I)](https://spring.io/blog/2024/09/26/ai-meets-spring-petclinic-implementing-an-ai-assistant-with-spring-ai-part-i)
-* [AI Meets Spring Petclinic: Implementing an AI Assistant with Spring AI (Part II)](https://spring.io/blog/2024/09/27/ai-meets-spring-petclinic-implementing-an-ai-assistant-with-spring-ai-part)
+A chatbot using **Generative AI** has been added to the famous Spring Petclinic application.
+This version uses the **[LangChain4j project](https://docs.langchain4j.dev/)** and currently supports **OpenAI** or **Azure's OpenAI** as the **LLM provider**. This is a fork from the **[spring-petclinic-ai](https://github.com/spring-petclinic/spring-petclinic-ai)** based on Spring AI.
 
 Spring Petclinic integrates a Chatbot that allows you to interact with the application in a natural language. Here are **some examples** of what you could ask:
 
 1. Please list the owners that come to the clinic.
-2. How many vets are there?
-3. Is there an owner named Betty?
+2. How many veterinary cardiologists are there?
+3. Is there an owner named Betty? What's her lastname?
 4. Which owners have dogs?
-5. Add a dog for Betty. Its name is Moopsie.
+5. Add a dog for Betty. Its name is Moopsie. His birthday is on 2 October 2024.
+6. Add today's visit to Moopsie.
 
 ![Screenshot of the chat dialog](docs/chat-dialog.png)
 
 Spring Petclinic currently supports **OpenAI** or **Azure's OpenAI** as the LLM provider.
-In order to start `spring-petlinic-springai` perform the following steps:
+In order to start `spring-petlinic-langchain4j` perform the following steps:
 
-1. Decide which provider you want to use. By default, the `spring-ai-openai-spring-boot-starter` dependency is enabled. You can change it to `spring-ai-azure-openai-spring-boot-starter`in either`pom.xml` or in `build.gradle`, depending on your build tool of choice.
+1. Decide which provider you want to use. By default, the `langchain4j-open-ai-spring-boot-starter` dependency is enabled. You can change it to `langchain4j-azure-open-ai-spring-boot-starter`in either`pom.xml` or in `build.gradle`, depending on your build tool of choice.
 2. Create an OpenAI API key or a Azure OpenAI resource in your Azure Portal. Refer to the [OpenAI's quickstart](https://platform.openai.com/docs/quickstart) or [Azure's documentation](https://learn.microsoft.com/en-us/azure/ai-services/openai/) for further information on how to obtain these. You only need to populate the provider you're using - either openai, or azure-openai.
 3. Export your API keys and endpoint as environment variables:
    * either OpenAI:
@@ -43,7 +40,7 @@ In order to start `spring-petlinic-springai` perform the following steps:
 Spring Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/) or [Gradle](https://spring.io/guides/gs/gradle/). You can build a jar file and run it from the command line (it should work just as well with Java 17 or newer):
 
 ```bash
-git clone https://github.com/spring-projects/spring-petclinic.git
+git clone https://github.com/spring-petclinic/spring-petclinic-langchain4j.git
 cd spring-petclinic
 ./mvnw package
 java -jar target/*.jar
@@ -71,7 +68,7 @@ There is no `Dockerfile` in this project. You can build a container image (if yo
 
 ## In case you find a bug/suggested improvement for Spring Petclinic
 
-Our issue tracker is available [here](https://github.com/spring-projects/spring-petclinic/issues).
+Our issue tracker is available [here](https://github.com/spring-petclinic/spring-petclinic-langchain4j/issues).
 
 ## Database configuration
 
@@ -93,8 +90,8 @@ or
 docker run -e POSTGRES_USER=petclinic -e POSTGRES_PASSWORD=petclinic -e POSTGRES_DB=petclinic -p 5432:5432 postgres:16.3
 ```
 
-Further documentation is provided for [MySQL](https://github.com/spring-projects/spring-petclinic/blob/main/src/main/resources/db/mysql/petclinic_db_setup_mysql.txt)
-and [PostgreSQL](https://github.com/spring-projects/spring-petclinic/blob/main/src/main/resources/db/postgres/petclinic_db_setup_postgres.txt).
+Further documentation is provided for [MySQL](https://github.com/spring-petclinic/spring-petclinic-langchain4j/blob/main/src/main/resources/db/mysql/petclinic_db_setup_mysql.txt)
+and [PostgreSQL](https://github.com/spring-petclinic/spring-petclinic-langchain4j/blob/main/src/main/resources/db/postgres/petclinic_db_setup_postgres.txt).
 
 Instead of vanilla `docker` you can also use the provided `docker-compose.yml` file to start the database containers. Each one has a profile just like the Spring profile:
 
@@ -136,7 +133,7 @@ The following items should be installed in your system:
 1. On the command line run:
 
     ```bash
-    git clone https://github.com/spring-projects/spring-petclinic.git
+    git clone https://github.com/spring-petclinic/spring-petclinic-langchain4j.git
     ```
 
 1. Inside Eclipse or STS:
@@ -161,9 +158,9 @@ The following items should be installed in your system:
 
 |Spring Boot Configuration | Class or Java property files  |
 |--------------------------|---|
-|The Main Class | [PetClinicApplication](https://github.com/spring-projects/spring-petclinic/blob/main/src/main/java/org/springframework/samples/petclinic/PetClinicApplication.java) |
-|Properties Files | [application.properties](https://github.com/spring-projects/spring-petclinic/blob/main/src/main/resources) |
-|Caching | [CacheConfiguration](https://github.com/spring-projects/spring-petclinic/blob/main/src/main/java/org/springframework/samples/petclinic/system/CacheConfiguration.java) |
+|The Main Class | [PetClinicApplication](https://github.com/spring-petclinic/spring-petclinic-langchain4j/blob/main/src/main/java/org/springframework/samples/petclinic/PetClinicApplication.java) |
+|Properties Files | [application.properties](https://github.com/spring-petclinic/spring-petclinic-langchain4j/blob/main/src/main/resources) |
+|Caching | [CacheConfiguration](https://github.com/spring-petclinic/spring-petclinic-langchain4j/blob/main/src/main/java/org/springframework/samples/petclinic/system/CacheConfiguration.java) |
 
 ## Interesting Spring Petclinic branches and forks
 
@@ -185,7 +182,7 @@ Here is a list of them:
 
 ## Contributing
 
-The [issue tracker](https://github.com/spring-projects/spring-petclinic/issues) is the preferred channel for bug reports, feature requests and submitting pull requests.
+The [issue tracker](https://github.com/spring-petclinic/spring-petclinic-langchain4j/issues) is the preferred channel for bug reports, feature requests and submitting pull requests.
 
 For pull requests, editor preferences are available in the [editor config](.editorconfig) for easy use in common text editors. Read more and download plugins at <https://editorconfig.org>. If you have not previously done so, please fill out and submit the [Contributor License Agreement](https://cla.pivotal.io/sign/spring).
 
