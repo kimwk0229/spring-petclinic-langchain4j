@@ -7,6 +7,25 @@
 A chatbot using **Generative AI** has been added to the famous Spring Petclinic application.
 This version uses the **[LangChain4j project](https://docs.langchain4j.dev/)** and currently supports **OpenAI** or **Azure's OpenAI** as the **LLM provider**. This is a fork from the **[spring-petclinic-ai](https://github.com/spring-petclinic/spring-petclinic-ai)** based on Spring AI.
 
+This sample demonstrates how to **easily integrate AI/LLM capabilities into a Java application using LangChain4j**.
+This can be achieved thanks to:
+* A unified **abstraction layer** designed to decouple your code from specific implementations like LLM or embedding providers, enabling easy component swapping.
+  Only the [application.properties](src/main/resources/application.properties) file references LLM providers such as OpenAI or Azure OpenAI.
+* **Memory** offers context to the LLM for both your current and previous conversations.
+  Refer to the use of the `MessageWindowChatMemory` class in [AssistantConfiguration](src/main/java/org/springframework/samples/petclinic/chat/AssistantConfiguration.java).
+* **AI Services** enables declarative definitions of complex AI behaviors through a straightforward Java API.
+  See the use of the `@AiService` annotation in the [Assistant](src/main/java/org/springframework/samples/petclinic/chat/Assistant.java) interface.
+* **System prompts** play a vital role in LLMs as they shape how models interpret and respond to user queries.
+  Look at the `@SystemMessage` annotation usage in the [Assistant](src/main/java/org/springframework/samples/petclinic/chat/Assistant.java) interface.
+* **Streaming** response token-by-token when using the `TokenStream` return type and Spring *Server-Sent Events* supports.
+  Take a look at the [AssistantController](src/main/java/org/springframework/samples/petclinic/chat/AssistantController.java) REST controller
+* **Function calling** or **Tools** allows the LLM to call, when necessary, one or more java methods.
+  The [AssistantTool](src/main/java/org/springframework/samples/petclinic/chat/AssistantTool.java) component declares functions using the `@Tool` annotation from LangChain4j.
+* **Structured outputs** allow LLM responses to be received in a specified format as Java POJOs.
+  [AssistantTool](src/main/java/org/springframework/samples/petclinic/chat/AssistantTool.java) uses Java records as the LLM/ input/output data structure.
+* **Retrieval-Augmented Generation** (RAG) enables an LLM to incorporate and respond based on specific data—such as data from the petclinic database—by ingesting and referencing it during interactions.
+  The [AssistantConfiguration](src/main/java/org/springframework/samples/petclinic/chat/AssistantConfiguration.java) declares the `EmbeddingModel`, `InMemoryEmbeddingStore` and `EmbeddingStoreContentRetriever`beans while the [EmbeddingStoreInit](src/main/java/org/springframework/samples/petclinic/chat/EmbeddingStoreInit.java) class handles vets data ingestion at startup. 
+
 Spring Petclinic integrates a Chatbot that allows you to interact with the application in a natural language. Here are **some examples** of what you could ask:
 
 1. Please list the owners that come to the clinic.

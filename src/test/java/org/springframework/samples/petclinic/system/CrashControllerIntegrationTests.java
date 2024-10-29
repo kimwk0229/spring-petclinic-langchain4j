@@ -48,9 +48,9 @@ import org.springframework.http.ResponseEntity;
 // NOT Waiting https://github.com/spring-projects/spring-boot/issues/5574
 @SpringBootTest(webEnvironment = RANDOM_PORT,
 		properties = { "server.error.include-message=ALWAYS", "management.endpoints.enabled-by-default=false",
-				"langchain4j.open-ai.chat-model.api-key=FAKE_KEY",
-				"langchain4j.azure-open-ai.chat-model.api-key=FAKE_KEY",
-				"langchain4j.azure-open-ai.chat-model.endpoint=FAKE_ENDPOINT" })
+				"langchain4j.open-ai.streaming-chat-model.api-key=FAKE_KEY",
+				"langchain4j.azure-open-ai.streaming-chat-model.api-key=FAKE_KEY",
+				"langchain4j.azure-open-ai.streaming-chat-model.endpoint=FAKE_ENDPOINT" })
 class CrashControllerIntegrationTests {
 
 	@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class,
