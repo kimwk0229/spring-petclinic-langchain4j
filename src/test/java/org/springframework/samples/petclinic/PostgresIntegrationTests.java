@@ -16,13 +16,6 @@
 
 package org.springframework.samples.petclinic;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
-
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.BeforeAll;
@@ -47,12 +40,16 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 import org.testcontainers.DockerClientFactory;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT,
-		properties = { "spring.docker.compose.skip.in-tests=false", "spring.docker.compose.profiles.active=postgres",
-				"langchain4j.open-ai.streaming-chat-model.api-key=FAKE_KEY",
-				"langchain4j.azure-open-ai.streaming-chat-model.api-key=FAKE_KEY",
-				"langchain4j.azure-open-ai.streaming-chat-model.endpoint=FAKE_ENDPOINT" })
-@ActiveProfiles("postgres")
+		properties = { "spring.docker.compose.skip.in-tests=false", "spring.docker.compose.profiles.active=postgres" })
+@ActiveProfiles(profiles = { "postgres", "test" })
 @DisabledInNativeImage
 public class PostgresIntegrationTests {
 
