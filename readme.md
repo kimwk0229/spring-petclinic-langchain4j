@@ -25,6 +25,7 @@ This can be achieved thanks to:
   [AssistantTool](src/main/java/org/springframework/samples/petclinic/chat/AssistantTool.java) uses Java records as the LLM/ input/output data structure.
 * **Retrieval-Augmented Generation** (RAG) enables an LLM to incorporate and respond based on specific data—such as data from the petclinic database—by ingesting and referencing it during interactions.
   The [AssistantConfiguration](src/main/java/org/springframework/samples/petclinic/chat/AssistantConfiguration.java) declares the `EmbeddingModel`, `InMemoryEmbeddingStore` and `EmbeddingStoreContentRetriever`beans while the [EmbeddingStoreInit](src/main/java/org/springframework/samples/petclinic/chat/EmbeddingStoreInit.java) class handles vets data ingestion at startup. 
+  The [VetQueryRouter](src/main/java/org/springframework/samples/petclinic/chat/VetQueryRouter.java) demonstrates how to conditionally skip retrieval, with decision-making driven by an LLM.
 
 Spring Petclinic integrates a Chatbot that allows you to interact with the application in a natural language. Here are **some examples** of what you could ask:
 
