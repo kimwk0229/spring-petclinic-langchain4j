@@ -41,13 +41,18 @@ Spring Petclinic currently supports **OpenAI** or **Azure's OpenAI** as the LLM 
 In order to start `spring-petlinic-langchain4j` perform the following steps:
 
 1. Decide which provider you want to use. By default, the `langchain4j-open-ai-spring-boot-starter` dependency is enabled. You can change it to `langchain4j-azure-open-ai-spring-boot-starter`in either`pom.xml` or in `build.gradle`, depending on your build tool of choice.
-2. Create an OpenAI API key or a Azure OpenAI resource in your Azure Portal. Refer to the [OpenAI's quickstart](https://platform.openai.com/docs/quickstart) or [Azure's documentation](https://learn.microsoft.com/en-us/azure/ai-services/openai/) for further information on how to obtain these. You only need to populate the provider you're using - either openai, or azure-openai.
+2. Create an OpenAI API key or a Azure OpenAI resource in your Azure Portal.
+   Refer to the [OpenAI's quickstart](https://platform.openai.com/docs/quickstart) or [Azure's documentation](https://learn.microsoft.com/en-us/azure/ai-services/openai/) for further information on how to obtain these.
+   You only need to populate the provider you're using - either openai, or azure-openai.
+   If you don't have your own OpenAI API key, don't worry!
+   You can temporarily use the `demo` key, which OpenAI provides free of charge for demonstration purposes.
+   This `demo` key has a quota, is limited to the gpt-4o-mini model, and is intended solely for demonstration use.
 3. Export your API keys and endpoint as environment variables:
    * either OpenAI:
     ```bash
     export OPENAI_API_KEY="your_api_key_here"
     ```
-   * or OpenAI:
+   * or Azure OpenAI:
     ```bash
     export AZURE_OPENAI_ENDPOINT="https://your_resource.openai.azure.com"
     export AZURE_OPENAI_KEY="your_api_key_here"
