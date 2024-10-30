@@ -16,8 +16,6 @@
 
 package org.springframework.samples.petclinic;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledInNativeImage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +35,10 @@ import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT,
-		properties = { "langchain4j.open-ai.streaming-chat-model.api-key=FAKE_KEY",
-				"langchain4j.azure-open-ai.streaming-chat-model.api-key=FAKE_KEY",
-				"langchain4j.azure-open-ai.streaming-chat-model.endpoint=FAKE_ENDPOINT" })
-@ActiveProfiles("mysql")
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ActiveProfiles(profiles = { "mysql", "test" })
 @Testcontainers(disabledWithoutDocker = true)
 @DisabledInNativeImage
 @DisabledInAotMode

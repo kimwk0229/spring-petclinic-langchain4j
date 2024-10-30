@@ -16,12 +16,6 @@
 
 package org.springframework.samples.petclinic.system;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-
-import java.util.List;
-import java.util.Map;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,13 +26,14 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.test.context.ActiveProfiles;
+
+import java.util.List;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 /**
  * Integration Test for {@link CrashController}.
@@ -47,10 +42,8 @@ import org.springframework.http.ResponseEntity;
  */
 // NOT Waiting https://github.com/spring-projects/spring-boot/issues/5574
 @SpringBootTest(webEnvironment = RANDOM_PORT,
-		properties = { "server.error.include-message=ALWAYS", "management.endpoints.enabled-by-default=false",
-				"langchain4j.open-ai.streaming-chat-model.api-key=FAKE_KEY",
-				"langchain4j.azure-open-ai.streaming-chat-model.api-key=FAKE_KEY",
-				"langchain4j.azure-open-ai.streaming-chat-model.endpoint=FAKE_ENDPOINT" })
+		properties = { "server.error.include-message=ALWAYS", "management.endpoints.enabled-by-default=false" })
+@ActiveProfiles("test")
 class CrashControllerIntegrationTests {
 
 	@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class,
