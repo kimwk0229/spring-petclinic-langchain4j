@@ -88,5 +88,4 @@ record VetResponse(List<String> vet) {
 }
 
 record VetRequest(Vet vet) {
-
 }
