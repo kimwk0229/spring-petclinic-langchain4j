@@ -11,8 +11,9 @@ This sample demonstrates how to **easily integrate AI/LLM capabilities into a Ja
 This can be achieved thanks to:
 * A unified **abstraction layer** designed to decouple your code from specific implementations like LLM or embedding providers, enabling easy component swapping.
   Only the [application.properties](src/main/resources/application.properties) file references LLM providers such as OpenAI or Azure OpenAI.
-* **Memory** offers context to the LLM for both your current and previous conversations.
-  Refer to the use of the `MessageWindowChatMemory` class in [AssistantConfiguration](src/main/java/org/springframework/samples/petclinic/chat/AssistantConfiguration.java).
+* **Memory** offers context to the LLM for both your current and previous conversations, with support for multiple users.
+  Refer to the use of the `MessageWindowChatMemory` class in [AssistantConfiguration](src/main/java/org/springframework/samples/petclinic/chat/AssistantConfiguration.java)
+  and the `@MemoryId` annotation in the [Assistant](src/main/java/org/springframework/samples/petclinic/chat/Assistant.java) interface.
 * **AI Services** enables declarative definitions of complex AI behaviors through a straightforward Java API.
   See the use of the `@AiService` annotation in the [Assistant](src/main/java/org/springframework/samples/petclinic/chat/Assistant.java) interface.
 * **System prompts** play a vital role in LLMs as they shape how models interpret and respond to user queries.
