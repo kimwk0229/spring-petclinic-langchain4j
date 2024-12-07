@@ -1,10 +1,10 @@
 plugins {
   id 'java'
-  id 'org.springframework.boot' version '3.3.2'
-  id 'io.spring.dependency-management' version '1.1.5'
-  id 'org.graalvm.buildtools.native' version '0.10.2'
-  id 'org.cyclonedx.bom' version '1.8.2'
-  id 'io.spring.javaformat' version '0.0.41'
+  id 'org.springframework.boot' version '3.4.0'
+  id 'io.spring.dependency-management' version '1.1.6'
+//  id 'org.graalvm.buildtools.native' version '0.10.3'
+  id 'org.cyclonedx.bom' version '1.10.0'
+  id 'io.spring.javaformat' version '0.0.43'
   id "io.spring.nohttp" version "0.0.11"
 }
 
@@ -12,10 +12,10 @@ apply plugin: 'java'
 apply plugin: 'checkstyle'
 apply plugin: 'io.spring.javaformat'
 
-gradle.startParameter.excludedTaskNames += [ "checkFormatAot", "checkFormatAotTest" ]
+// gradle.startParameter.excludedTaskNames += [ "checkFormatAot", "checkFormatAotTest" ]
 
 group = 'org.springframework.samples'
-version = '3.3.0'
+version = '3.4.0'
 
 java {
   sourceCompatibility = JavaVersion.VERSION_17
@@ -26,17 +26,22 @@ repositories {
   maven { url 'https://repo.spring.io/milestone' }
 }
 
+ext.checkstyleVersion = "10.20.1"
+ext.springJavaformatCheckstyleVersion = "0.0.43"
+ext.webjarsLocatorLiteVersion = "1.0.1"
 ext.webjarsFontawesomeVersion = "4.7.0"
 ext.webjarsBootstrapVersion = "5.3.3"
 ext.webjarsMarkedVersion = "14.1.2"
 ext.langchain4jVersion = "0.35.0"
 
 dependencies {
-  implementation 'dev.langchain4j:langchain4j-spring-boot-starter:${langchain4jVersion}'
-  implementation 'dev.langchain4j:langchain4j-open-ai-spring-boot-starter:${langchain4jVersion}'
-//  implementation 'dev.langchain4j:langchain4j-azure-open-ai-spring-boot-starter:${langchain4jVersion}'
-  implementation 'dev.langchain4j:langchain4j-embeddings-all-minilm-l6-v2:${langchain4jVersion}'
-  implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
+  implementation "dev.langchain4j:langchain4j-spring-boot-starter:${langchain4jVersion}"
+  implementation "dev.langchain4j:langchain4j-open-ai-spring-boot-starter:${langchain4jVersion}"
+//  implementation "dev.langchain4j:langchain4j-azure-open-ai-spring-boot-starter:${langchain4jVersion}"
+  implementation "dev.langchain4j:langchain4j-embeddings-all-minilm-l6-v2:${langchain4jVersion}"
+  // Workaround for AOT issue (https://github.com/spring-projects/spring-framework/pull/33949) -->
+  implementation 'io.projectreactor:reactor-core'
+
   implementation 'org.springframework.boot:spring-boot-starter-cache'
   implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
   implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -45,6 +50,7 @@ dependencies {
   implementation 'javax.cache:cache-api'
   implementation 'jakarta.xml.bind:jakarta.xml.bind-api'
   runtimeOnly 'org.springframework.boot:spring-boot-starter-actuator'
+  runtimeOnly "org.webjars:webjars-locator-lite:${webjarsLocatorLiteVersion}"
   runtimeOnly "org.webjars.npm:bootstrap:${webjarsBootstrapVersion}"
   runtimeOnly "org.webjars.npm:font-awesome:${webjarsFontawesomeVersion}"
   runtimeOnly "org.webjars.npm:marked:${webjarsMarkedVersion}"
@@ -58,14 +64,9 @@ dependencies {
   testImplementation 'org.springframework.boot:spring-boot-docker-compose'
   testImplementation 'org.testcontainers:junit-jupiter'
   testImplementation 'org.testcontainers:mysql'
-  checkstyle 'io.spring.javaformat:spring-javaformat-checkstyle:0.0.41'
-  checkstyle 'com.puppycrawl.tools:checkstyle:10.16.0'
-}
-
-dependencyManagement {
-  imports {
-    mavenBom "org.springframework.ai:spring-ai-bom:${springAiVersion}"
-  }
+  testImplementation 'org.testcontainers:postgresql'
+  checkstyle "io.spring.javaformat:spring-javaformat-checkstyle:${springJavaformatCheckstyleVersion}"
+  checkstyle "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
 }
 
 tasks.named('test') {
@@ -88,11 +89,11 @@ tasks.named("formatMain").configure { dependsOn("checkstyleNohttp") }
 tasks.named("formatTest").configure { dependsOn("checkstyleTest") }
 tasks.named("formatTest").configure { dependsOn("checkstyleNohttp") }
 
-checkstyleAot.enabled = false
-checkstyleAotTest.enabled = false
-
-checkFormatAot.enabled = false
-checkFormatAotTest.enabled = false
-
-formatAot.enabled = false
-formatAotTest.enabled = false
+//checkstyleAot.enabled = false
+//checkstyleAotTest.enabled = false
+//
+//checkFormatAot.enabled = false
+//checkFormatAotTest.enabled = false
+//
+//formatAot.enabled = false
+//formatAotTest.enabled = false
