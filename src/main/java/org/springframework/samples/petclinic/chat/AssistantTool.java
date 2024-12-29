@@ -8,7 +8,6 @@ import org.springframework.samples.petclinic.owner.Owner;
 import org.springframework.samples.petclinic.owner.OwnerRepository;
 import org.springframework.samples.petclinic.owner.Pet;
 import org.springframework.samples.petclinic.owner.PetType;
-import org.springframework.samples.petclinic.vet.Vet;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -39,21 +38,20 @@ public class AssistantTool {
 	}
 
 	@Tool("List the owners that the pet clinic has: ownerId, name, address, phone number, pets")
-	public OwnersResponse getAllOwners() {
+	public List<Owner> getAllOwners() {
 		Pageable pageable = PageRequest.of(0, 100);
 		Page<Owner> ownerPage = ownerRepository.findAll(pageable);
-		return new OwnersResponse(ownerPage.getContent());
+		return ownerPage.getContent();
 	}
 
 	@Tool("Add a pet with the specified petTypeId, to an owner identified by the ownerId")
-	public AddedPetResponse addPetToOwner(AddPetRequest request) {
-		Owner owner = ownerRepository.findById(request.ownerId()).orElseThrow();
+	public Owner addPetToOwner(Pet pet, String petName, Integer ownerId) {
+		Owner owner = ownerRepository.findById(ownerId).orElseThrow();
 		// Waiting for https://github.com/langchain4j/langchain4j/issues/2249
-		Pet pet = request.pet();
-		pet.setName(request.petName());
+		pet.setName(petName);
 		owner.addPet(pet);
 		this.ownerRepository.save(owner);
-		return new AddedPetResponse(owner);
+		return owner;
 	}
 
 	@Tool("List all pairs of petTypeId and pet type name")
@@ -65,30 +63,8 @@ public class AssistantTool {
 			Add a new pet owner to the pet clinic. \
 			The Owner must include a first name and a last name as two separate words, \
 			plus an address and a 10-digit phone number""")
-	public OwnerResponse addOwnerToPetclinic(OwnerRequest ownerRequest) {
-		ownerRepository.save(ownerRequest.owner());
-		return new OwnerResponse(ownerRequest.owner());
+	public Owner addOwnerToPetclinic(Owner owner) {
+		return ownerRepository.save(owner);
 	}
 
-}
-
-record AddPetRequest(Pet pet, String petName, Integer ownerId) {
-}
-
-record OwnerRequest(Owner owner) {
-}
-
-record OwnersResponse(List<Owner> owners) {
-}
-
-record OwnerResponse(Owner owner) {
-}
-
-record AddedPetResponse(Owner owner) {
-}
-
-record VetResponse(List<String> vet) {
-}
-
-record VetRequest(Vet vet) {
 }
