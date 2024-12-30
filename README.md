@@ -28,7 +28,11 @@ This can be achieved thanks to:
   The [AssistantConfiguration](src/main/java/org/springframework/samples/petclinic/chat/AssistantConfiguration.java) declares the `EmbeddingModel`, `InMemoryEmbeddingStore` and `EmbeddingStoreContentRetriever`beans while the [EmbeddingStoreInit](src/main/java/org/springframework/samples/petclinic/chat/EmbeddingStoreInit.java) class handles vets data ingestion at startup. 
   The [VetQueryRouter](src/main/java/org/springframework/samples/petclinic/chat/VetQueryRouter.java) demonstrates how to conditionally skip retrieval, with decision-making driven by an LLM.
 
-Spring Petclinic integrates a Chatbot that allows you to interact with the application in a natural language. Here are **some examples** of what you could ask:
+The French blog post [Integrating a chatbot into a Java webapp with LangChain4j](https://javaetmoi.com/2024/11/integrer-un-chatbot-dans-une-webapp-java-avec-langchain4j/) provides
+a detailed explanation of the integration of the integration of LangChain4j into the Spring Petclinic application.
+
+Spring Petclinic integrates a Chatbot that allows you to interact with the application in a natural language.
+Here are **some examples** of what you could ask:
 
 1. Please list the owners that come to the clinic.
 2. How many veterinary cardiologists are there?
