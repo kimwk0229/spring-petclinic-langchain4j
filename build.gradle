@@ -38,6 +38,7 @@ dependencies {
   implementation "dev.langchain4j:langchain4j-spring-boot-starter:${langchain4jVersion}"
   implementation "dev.langchain4j:langchain4j-open-ai-spring-boot-starter:${langchain4jVersion}"
 //  implementation "dev.langchain4j:langchain4j-azure-open-ai-spring-boot-starter:${langchain4jVersion}"
+//  implementation "dev.langchain4j:langchain4j-ollama-spring-boot-starter:${langchain4jVersion}"
   implementation "dev.langchain4j:langchain4j-embeddings-all-minilm-l6-v2:${langchain4jVersion}"
   // Workaround for AOT issue (https://github.com/spring-projects/spring-framework/pull/33949) -->
   implementation 'io.projectreactor:reactor-core'

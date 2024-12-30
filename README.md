@@ -5,7 +5,8 @@
 ## Understanding the Spring Petclinic LangChain4j application
 
 A chatbot using **Generative AI** has been added to the famous Spring Petclinic application.
-This version uses the **[LangChain4j project](https://docs.langchain4j.dev/)** and currently supports **OpenAI** or **Azure's OpenAI** as the **LLM provider**. This is a fork from the **[spring-petclinic-ai](https://github.com/spring-petclinic/spring-petclinic-ai)** based on Spring AI.
+This version uses the **[LangChain4j project](https://docs.langchain4j.dev/)** and currently supports **OpenAI** or **Azure's OpenAI** or **Ollama** (partial) as the **LLM provider**.
+This is a fork from the **[spring-petclinic-ai](https://github.com/spring-petclinic/spring-petclinic-ai)** based on Spring AI.
 
 This sample demonstrates how to **easily integrate AI/LLM capabilities into a Java application using LangChain4j**.
 This can be achieved thanks to:
@@ -43,27 +44,72 @@ Here are **some examples** of what you could ask:
 
 ![Screenshot of the chat dialog](docs/chat-dialog.png)
 
-Spring Petclinic currently supports **OpenAI** or **Azure's OpenAI** as the LLM provider.
-In order to start `spring-petlinic-langchain4j` perform the following steps:
+## Choosing the LLM provider
 
-1. Decide which provider you want to use. By default, the `langchain4j-open-ai-spring-boot-starter` dependency is enabled. You can change it to `langchain4j-azure-open-ai-spring-boot-starter`in either`pom.xml` or in `build.gradle`, depending on your build tool of choice.
-2. Create an OpenAI API key or a Azure OpenAI resource in your Azure Portal.
-   Refer to the [OpenAI's quickstart](https://platform.openai.com/docs/quickstart) or [Azure's documentation](https://learn.microsoft.com/en-us/azure/ai-services/openai/) for further information on how to obtain these.
-   You only need to populate the provider you're using - either openai, or azure-openai.
-   If you don't have your own OpenAI API key, don't worry!
-   You can temporarily use the `demo` key, which OpenAI provides free of charge for demonstration purposes.
-   This `demo` key has a quota, is limited to the gpt-4o-mini model, and is intended solely for demonstration use.
-3. Export your API keys and endpoint as environment variables:
-   * either OpenAI:
-    ```bash
-    export OPENAI_API_KEY="your_api_key_here"
-    ```
-   * or Azure OpenAI:
-    ```bash
-    export AZURE_OPENAI_ENDPOINT="https://your_resource.openai.azure.com"
-    export AZURE_OPENAI_KEY="your_api_key_here"
-    ```
-4. Follow the [next section Run Petclinic locally](#run-petclinic-locally)
+Spring Petclinic currently supports **OpenAI** or **Azure's OpenAI** or **Ollama** (partial support) as the LLM provider.
+**OpenAI** is the **default**.
+
+Please note that the Spring Petclinic is not fully functional with the `llama3.1` model.
+See the issue [#10](https://github.com/spring-petclinic/spring-petclinic-langchain4j/issues/10 ) for more information.
+
+### 1. Use the selected LangChain4j Spring Boot starter
+
+Spring Petclinic supports both `Maven` and `Gradle` build tools.
+
+#### Maven build
+
+Switching between LLM is done using **Maven profiles**. Three Maven profiles are provided: 
+1. `openai` (default)
+2. `azure-openai`
+3. `ollama`
+
+By default, thanks to the default `openai` profile, the `langchain4j-open-ai-spring-boot-starter` dependency is enabled.
+You can change it to `langchain4j-azure-open-ai-spring-boot-starter` or `langchain4j-ollama-spring-boot-starter` by activating the corresponding profile.
+```shell
+./mvnw package -P azure-openai
+```
+`in either`pom.xml` or in `build.gradle`, depending on your build tool of choice.
+
+#### Gradle build
+
+Gradle users will need to comment or uncomment the appropriate `dev.langchain4j:langchain4j-<llm>>-spring-boot-starter` dependency
+in the `build.gradle` file, depending on the LLM provider they want to use.
+
+
+### 2. Setup your LLM provider
+   
+#### OpenAI
+
+Create an OpenAI API key by following the [OpenAI's quickstart](https://platform.openai.com/docs/quickstart).
+If you don't have your own OpenAI API key, don't worry!
+You can temporarily use the `demo` key, which OpenAI provides free of charge for demonstration purposes.
+This `demo` key has a quota, is limited to the gpt-4o-mini model, and is intended solely for demonstration use.
+
+Export your OpenAI API key as environment variable:
+```bash
+export OPENAI_API_KEY="your_api_key_here"
+ ```
+
+#### Azure OpenAI
+
+Create a Azure OpenAI resource in your Azure Portal.
+Refer to the [Azure's documentation](https://learn.microsoft.com/en-us/azure/ai-services/openai/) for further information on how to obtain these.
+
+Then export your API keys and endpoint as environment variables:
+```bash
+export AZURE_OPENAI_ENDPOINT="https://your_resource.openai.azure.com"
+export AZURE_OPENAI_KEY="your_api_key_here"
+```
+
+#### Ollama
+
+Download the Ollama client from the [Ollama website](https://ollama.com/).
+Run the `llama3.1` model:
+```shell
+ollama run llama3.1
+```
+By default, the Ollama REST API starts on `http://localhost:11434`. This URL is used in the `application.properties` file.
+
 
 ## Run Petclinic locally
 
