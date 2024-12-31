@@ -95,9 +95,18 @@
       <div class="chatbox-messages" id="chatbox-messages">
         <!-- Chat messages will be dynamically inserted here -->
       </div>
-      <div class="chatbox-footer">
-        <input type="text" id="chatbox-input" placeholder="Type a message..." onkeydown="handleKeyPress(event)" />
-        <button onclick="sendMessage()">Send</button>
+      <div id="chatbox-input-container">
+        <textarea 
+          id="chatbox-input" 
+          rows="1" 
+          onkeydown="handleKeyDown(event)"
+          placeholder="Enter your message..."></textarea>
+        <button onclick="sendMessage()" class="btn btn-primary">
+            <i class="fa fa-paper-plane"></i>
+        </button>
+        <button id="mic-button" onclick="toggleSpeechRecognition()" class="btn btn-primary">
+            <i class="fa fa-microphone"></i>
+        </button>
       </div>
     </div>
   </div>

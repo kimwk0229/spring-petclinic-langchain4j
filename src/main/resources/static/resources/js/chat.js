@@ -104,10 +104,11 @@ async function displayBotReply(response) {
     }
 }
 
-function handleKeyPress(event) {
-    if (event.key === "Enter") {
-        event.preventDefault(); // Prevents adding a newline
-        sendMessage(); // Send the message when Enter is pressed
+function handleKeyDown(event) {
+    // If it's the Enter key without the Shift key
+    if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault(); // Prevents line feed
+        sendMessage();
     }
 }
 
@@ -133,4 +134,101 @@ function uuidv4() {
             const v = c === 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
+}
+
+let recognition = null;
+let isListening = false;
+
+function initializeSpeechRecognition() {
+    if ('webkitSpeechRecognition' in window) {
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        
+        const browserLang = navigator.language || navigator.userLanguage;
+        recognition.lang = browserLang || 'en-US';
+
+        let finalTranscript = '';
+        
+        recognition.onresult = function(event) {
+            const input = document.getElementById('chatbox-input');
+            const lastResult = event.results[event.results.length - 1];
+            
+            if (lastResult.isFinal) {
+                finalTranscript = lastResult[0].transcript;
+                input.value = finalTranscript;
+                recognition.stop();
+            } else {
+                input.value = finalTranscript + lastResult[0].transcript;
+            }
+        };
+
+        recognition.onend = function() {
+            const input = document.getElementById('chatbox-input');
+            if (input.value.trim()) {
+                setTimeout(() => {
+                    sendMessage();
+                }, 100);
+            }
+            toggleMicrophoneButton(false);
+            isListening = false;
+            finalTranscript = '';
+        };
+
+        recognition.onerror = function(event) {
+            const userElements = prepareMessage('bot');
+            let errorMessage = 'Speech recognition error: ';
+            
+            switch(event.error) {
+                case 'network':
+                    errorMessage += 'Network error occurred';
+                    break;
+                case 'no-speech':
+                    errorMessage += 'No speech was detected';
+                    break;
+                case 'not-allowed':
+                    errorMessage += 'Microphone access was denied';
+                    break;
+                default:
+                    errorMessage += 'An unknown error occurred';
+            }
+            
+            displayMessage(errorMessage, userElements);
+            toggleMicrophoneButton(false);
+        };
+    } else {
+        const userElements = prepareMessage('bot');
+        displayMessage('Speech recognition is not supported by your browser. Please try using a modern browser like Chrome.', userElements);
+    }
+}
+
+function toggleSpeechRecognition() {
+    if (!recognition) {
+        initializeSpeechRecognition();
+    }
+
+    if (!isListening) {
+        try {
+            recognition.start();
+            isListening = true;
+            toggleMicrophoneButton(true);
+        } catch (error) {
+            const userElements = prepareMessage('bot');
+            displayMessage('Could not start speech recognition. Please make sure you have granted microphone permissions.', userElements);
+            toggleMicrophoneButton(false);
+        }
+    } else {
+        recognition.stop();
+        isListening = false;
+        toggleMicrophoneButton(false);
+    }
+}
+
+function toggleMicrophoneButton(isActive) {
+    const micButton = document.getElementById('mic-button');
+    if (isActive) {
+        micButton.classList.add('active');
+    } else {
+        micButton.classList.remove('active');
+    }
 }
