@@ -79,13 +79,6 @@
       <artifactId>langchain4j-spring-boot-starter</artifactId>
       <version>${langchain4j.version}</version>
     </dependency>
-<!--    <dependency>-->
-<!--      <groupId>dev.langchain4j</groupId>-->
-<!--      <artifactId>langchain4j-ollama-spring-boot-starter</artifactId>-->
-<!--      &lt;!&ndash;artifactId>langchain4j-open-ai-spring-boot-starter</artifactId&ndash;&gt;-->
-<!--&lt;!&ndash;      <artifactId>langchain4j-azure-open-ai-spring-boot-starter</artifactId>&ndash;&gt;-->
-<!--      <version>${langchain4j.version}</version>-->
-<!--    </dependency>-->
     <dependency>
       <groupId>dev.langchain4j</groupId>
       <artifactId>langchain4j-embeddings-all-minilm-l6-v2</artifactId>
