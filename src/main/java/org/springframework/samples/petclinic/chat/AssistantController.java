@@ -27,7 +27,7 @@ class AssistantController {
 	@PostMapping(value = "/chat/{user}")
 	public SseEmitter chat(@PathVariable UUID user, @RequestBody String query) {
 		SseEmitter emitter = new SseEmitter();
-		nonBlockingService.execute(() -> assistant.chat(user, query).onNext(message -> {
+		nonBlockingService.execute(() -> assistant.chat(user, query).onPartialResponse(message -> {
 			try {
 				sendMessage(emitter, message);
 			}
@@ -35,7 +35,7 @@ class AssistantController {
 				LOGGER.error("Error while writing next token", e);
 				emitter.completeWithError(e);
 			}
-		}).onComplete(token -> emitter.complete()).onError(error -> {
+		}).onCompleteResponse(token -> emitter.complete()).onError(error -> {
 			LOGGER.error("Unexpected chat error", error);
 			try {
 				sendMessage(emitter, error.getMessage());

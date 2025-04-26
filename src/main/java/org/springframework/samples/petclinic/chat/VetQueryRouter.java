@@ -54,7 +54,7 @@ class VetQueryRouter implements QueryRouter {
 	public Collection<ContentRetriever> route(Query query) {
 		Prompt prompt = PROMPT_TEMPLATE.apply(query.text());
 
-		AiMessage aiMessage = chatLanguageModel.generate(prompt.toUserMessage()).content();
+		AiMessage aiMessage = chatLanguageModel.chat(prompt.toUserMessage()).aiMessage();
 		LOGGER.debug("LLM decided: {}", aiMessage.text());
 
 		if (aiMessage.text().toLowerCase().contains("yes")) {
