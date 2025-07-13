@@ -26,12 +26,16 @@ public class PetClinicRuntimeHints implements RuntimeHintsRegistrar {
 
 	@Override
 	public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
-		hints.resources().registerPattern("db/*"); // https://github.com/spring-projects/spring-boot/issues/32654
-		hints.resources().registerPattern("messages/*");
-		hints.resources().registerPattern("mysql-default-conf");
-		hints.serialization().registerType(BaseEntity.class);
-		hints.serialization().registerType(Person.class);
-		hints.serialization().registerType(Vet.class);
+		hints.resources().registerPattern("db/*"); // 리소스 힌트 등록: 'db/' 경로의 모든 리소스
+		hints.resources().registerPattern("messages/*"); // 리소스 힌트 등록: 'messages/' 경로의 모든
+															// 리소스
+		hints.resources().registerPattern("mysql-default-conf"); // 리소스 힌트 등록:
+																	// 'mysql-default-conf'
+																	// 파일
+
+		hints.serialization().registerType(BaseEntity.class); // 직렬화 힌트 등록: BaseEntity 클래스
+		hints.serialization().registerType(Person.class); // 직렬화 힌트 등록: Person 클래스
+		hints.serialization().registerType(Vet.class); // 직렬화 힌트 등록: Vet 클래스
 	}
 
 }

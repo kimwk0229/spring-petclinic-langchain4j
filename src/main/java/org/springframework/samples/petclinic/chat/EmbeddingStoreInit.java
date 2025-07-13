@@ -25,6 +25,8 @@ import java.util.List;
  * Loads the veterinarians data into an Embedding Store for the purpose of RAG
  * functionality.
  *
+ * RAG(Retrieval Augmented Generation) 기능을 위해 수의사 데이터를 임베딩 스토어에 로드합니다.
+ *
  * @author Oded Shopen
  * @author Antoine Rey
  */
@@ -48,37 +50,53 @@ public class EmbeddingStoreInit {
 
 	@EventListener
 	public void loadVetDataToEmbeddingStoreOnStartup(ApplicationStartedEvent event) {
-		Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
+		// 애플리케이션 시작 시 수의사 데이터를 임베딩 스토어에 로드합니다.
+		// Loads veterinarian data into the embedding store on application startup.
+
+		var pageable = PageRequest.of(0, Integer.MAX_VALUE);
 		Page<Vet> vetsPage = vetRepository.findAll(pageable);
 
-		String vetsAsJson = convertListToJson(vetsPage.getContent());
+		var vetsAsJson = convertListToJson(vetsPage.getContent());
 
-		EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
+		var ingestor = EmbeddingStoreIngestor.builder()
 			.documentSplitter(new DocumentByLineSplitter(1000, 200))
 			.embeddingModel(embeddingModel)
 			.embeddingStore(embeddingStore)
 			.build();
 
+		// JSON 형식의 수의사 데이터를 임베딩 스토어에 ingest 합니다.
+		// Ingests veterinarian data in JSON format into the embedding store.
 		ingestor.ingest(Document.from(vetsAsJson));
 
-		// In-memory embedding store can be serialized and deserialized to/from file
+		// 인메모리 임베딩 스토어는 파일로 직렬화 및 역직렬화할 수 있습니다.
 		// String filePath = "embedding.store";
 		// embeddingStore.serializeToFile(filePath);
+		// 인메모리 임베딩 스토어는 파일로 직렬화 및 역직렬화할 수 있습니다.
 	}
 
 	public String convertListToJson(List<Vet> vets) {
-		ObjectMapper objectMapper = new ObjectMapper();
+		var objectMapper = new ObjectMapper();
+
 		try {
 			// Convert List<Vet> to JSON string
-			StringBuilder jsonArray = new StringBuilder();
+			// List<Vet>를 JSON 문자열로 변환합니다.
+			var jsonArray = new StringBuilder();
+
 			for (Vet vet : vets) {
-				String jsonElement = objectMapper.writeValueAsString(vet);
+				// 각 Vet 객체를 JSON 문자열로 변환하고 줄바꿈 문자로 구분합니다.
+				// Converts each Vet object to a JSON string and separates them with a
+				// newline character.
+				var jsonElement = objectMapper.writeValueAsString(vet);
 				jsonArray.append(jsonElement).append("\n"); // For use of the
 															// DocumentByLineSplitter
 			}
+
 			return jsonArray.toString();
 		}
 		catch (JsonProcessingException e) {
+			// 수의사 목록에서 JSON을 생성하는 중 문제가 발생하면 오류를 로깅합니다.
+			// Logs an error if problems are encountered when generating JSON from the
+			// vets list.
 			logger.error("Problems encountered when generating JSON from the vets list", e);
 			return null;
 		}

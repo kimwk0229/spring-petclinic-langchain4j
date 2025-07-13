@@ -2,23 +2,23 @@ plugins {
   id 'java'
   id 'org.springframework.boot' version '3.4.2'
   id 'io.spring.dependency-management' version '1.1.6'
-//  id 'org.graalvm.buildtools.native' version '0.10.3'
-  id 'org.cyclonedx.bom' version '1.10.0'
-  id 'io.spring.javaformat' version '0.0.43'
-  id "io.spring.nohttp" version "0.0.11"
+//  id 'org.graalvm.buildtools.native' version '0.10.3' // GraalVM 네이티브 이미지 빌드 도구 (현재 주석 처리됨)
+  id 'org.cyclonedx.bom' version '1.10.0' // CycloneDX BOM 생성 플러그인
+  id 'io.spring.javaformat' version '0.0.43' // Spring Java Format 플러그인
+  id "io.spring.nohttp" version "0.0.11" // HTTP/HTTPS URL 검사 플러그인
 }
 
 apply plugin: 'java'
 apply plugin: 'checkstyle'
 apply plugin: 'io.spring.javaformat'
 
-// gradle.startParameter.excludedTaskNames += [ "checkFormatAot", "checkFormatAotTest" ]
-
+// gradle.startParameter.excludedTaskNames += [ "checkFormatAot", "checkFormatAotTest" ] // AOT 관련 포맷 검사 작업 제외 (현재 주석 처리됨)
+// 프로젝트 그룹 ID
 group = 'org.springframework.samples'
+// 프로젝트 버전
 version = '3.4.0'
-
 java {
-  sourceCompatibility = JavaVersion.VERSION_17
+  sourceCompatibility = JavaVersion.VERSION_17 // 자바 소스 호환성 버전
 }
 
 repositories {
@@ -26,57 +26,61 @@ repositories {
   maven { url 'https://repo.spring.io/milestone' }
 }
 
+// Checkstyle 버전 정의
 ext.checkstyleVersion = "10.20.1"
+// Spring Java Format Checkstyle 버전
 ext.springJavaformatCheckstyleVersion = "0.0.43"
-ext.webjarsLocatorLiteVersion = "1.0.1"
-ext.webjarsFontawesomeVersion = "4.7.0"
-ext.webjarsBootstrapVersion = "5.3.3"
-ext.webjarsMarkedVersion = "14.1.2"
-ext.langchain4jVersion = "1.0.0-beta3"
+ext.webjarsLocatorLiteVersion = "1.0.1" // WebJars Locator Lite 버전
+ext.webjarsFontawesomeVersion = "4.7.0" // WebJars Font Awesome 버전
+ext.webjarsBootstrapVersion = "5.3.3" // WebJars Bootstrap 버전
+ext.webjarsMarkedVersion = "14.1.2" // WebJars Marked 버전
+ext.langchain4jVersion = "1.0.0-beta3" // LangChain4j 버전
 
 dependencies {
-  implementation "dev.langchain4j:langchain4j-spring-boot-starter:${langchain4jVersion}"
-  implementation "dev.langchain4j:langchain4j-open-ai-spring-boot-starter:${langchain4jVersion}"
-//  implementation "dev.langchain4j:langchain4j-azure-open-ai-spring-boot-starter:${langchain4jVersion}"
-//  implementation "dev.langchain4j:langchain4j-ollama-spring-boot-starter:${langchain4jVersion}"
-  implementation "dev.langchain4j:langchain4j-embeddings-all-minilm-l6-v2:${langchain4jVersion}"
-  // Workaround for AOT issue (https://github.com/spring-projects/spring-framework/pull/33949) -->
-  implementation 'io.projectreactor:reactor-core'
+  implementation "dev.langchain4j:langchain4j-spring-boot-starter:${langchain4jVersion}" // LangChain4j Spring Boot 스타터
+  implementation "dev.langchain4j:langchain4j-open-ai-spring-boot-starter:${langchain4jVersion}" // LangChain4j OpenAI Spring Boot 스타터
+//  implementation "dev.langchain4j:langchain4j-azure-open-ai-spring-boot-starter:${langchain4jVersion}" // LangChain4j Azure OpenAI Spring Boot 스타터 (현재 주석 처리됨)
+//  implementation "dev.langchain4j:langchain4j-ollama-spring-boot-starter:${langchain4jVersion}" // LangChain4j Ollama Spring Boot 스타터 (현재 주석 처리됨)
+  implementation "dev.langchain4j:langchain4j-embeddings-all-minilm-l6-v2:${langchain4jVersion}" // LangChain4j 임베딩 (MiniLM-L6-v2)
+  // AOT 이슈 해결을 위한 임시 방편 (https://github.com/spring-projects/spring-framework/pull/33949)
+  implementation 'io.projectreactor:reactor-core' // Reactor Core (AOT 이슈 해결용)
 
-  implementation 'org.springframework.boot:spring-boot-starter-cache'
-  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-  implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-  implementation 'org.springframework.boot:spring-boot-starter-web'
-  implementation 'org.springframework.boot:spring-boot-starter-validation'
-  implementation 'javax.cache:cache-api'
-  implementation 'jakarta.xml.bind:jakarta.xml.bind-api'
-  runtimeOnly 'org.springframework.boot:spring-boot-starter-actuator'
-  runtimeOnly "org.webjars:webjars-locator-lite:${webjarsLocatorLiteVersion}"
-  runtimeOnly "org.webjars.npm:bootstrap:${webjarsBootstrapVersion}"
-  runtimeOnly "org.webjars.npm:font-awesome:${webjarsFontawesomeVersion}"
-  runtimeOnly "org.webjars.npm:marked:${webjarsMarkedVersion}"
-  runtimeOnly 'com.github.ben-manes.caffeine:caffeine'
-  runtimeOnly 'com.h2database:h2'
-  runtimeOnly 'com.mysql:mysql-connector-j'
-  runtimeOnly 'org.postgresql:postgresql'
-  developmentOnly 'org.springframework.boot:spring-boot-devtools'
-  testImplementation 'org.springframework.boot:spring-boot-starter-test'
-  testImplementation 'org.springframework.boot:spring-boot-testcontainers'
-  testImplementation 'org.springframework.boot:spring-boot-docker-compose'
-  testImplementation 'org.testcontainers:junit-jupiter'
-  testImplementation 'org.testcontainers:mysql'
-  testImplementation 'org.testcontainers:postgresql'
-  checkstyle "io.spring.javaformat:spring-javaformat-checkstyle:${springJavaformatCheckstyleVersion}"
-  checkstyle "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
+  implementation 'org.springframework.boot:spring-boot-starter-cache' // Spring Boot 캐시 스타터
+  implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // Spring Boot Data JPA 스타터
+  implementation 'org.springframework.boot:spring-boot-starter-thymeleaf' // Spring Boot Thymeleaf 스타터
+  implementation 'org.springframework.boot:spring-boot-starter-web' // Spring Boot Web 스타터
+  implementation 'org.springframework.boot:spring-boot-starter-validation' // Spring Boot Validation 스타터
+  implementation 'javax.cache:cache-api' // JSR-107 캐시 API
+  implementation 'jakarta.xml.bind:jakarta.xml.bind-api' // Jakarta XML Bind API
+
+  runtimeOnly 'org.springframework.boot:spring-boot-starter-actuator' // Spring Boot Actuator 스타터
+  runtimeOnly "org.webjars:webjars-locator-lite:${webjarsLocatorLiteVersion}" // WebJars Locator Lite
+  runtimeOnly "org.webjars.npm:bootstrap:${webjarsBootstrapVersion}" // WebJars Bootstrap
+  runtimeOnly "org.webjars.npm:font-awesome:${webjarsFontawesomeVersion}" // WebJars Font Awesome
+  runtimeOnly "org.webjars.npm:marked:${webjarsMarkedVersion}" // WebJars Marked
+  runtimeOnly 'com.github.ben-manes.caffeine:caffeine' // Caffeine 캐시 라이브러리
+  runtimeOnly 'com.h2database:h2' // H2 데이터베이스
+  runtimeOnly 'com.mysql:mysql-connector-j' // MySQL JDBC 드라이버
+  runtimeOnly 'org.postgresql:postgresql' // PostgreSQL JDBC 드라이버
+
+  developmentOnly 'org.springframework.boot:spring-boot-devtools' // Spring Boot 개발 도구
+  testImplementation 'org.springframework.boot:spring-boot-starter-test' // Spring Boot 테스트 스타터
+  testImplementation 'org.springframework.boot:spring-boot-testcontainers' // Spring Boot Testcontainers 통합
+  testImplementation 'org.springframework.boot:spring-boot-docker-compose' // Spring Boot Docker Compose 통합
+  testImplementation 'org.testcontainers:junit-jupiter' // Testcontainers JUnit Jupiter 통합
+  testImplementation 'org.testcontainers:mysql' // Testcontainers MySQL 모듈
+  testImplementation 'org.testcontainers:postgresql' // Testcontainers PostgreSQL 모듈
+  checkstyle "io.spring.javaformat:spring-javaformat-checkstyle:${springJavaformatCheckstyleVersion}" // Spring Java Format Checkstyle
+  checkstyle "com.puppycrawl.tools:checkstyle:${checkstyleVersion}" // Checkstyle
 }
 
 tasks.named('test') {
-  useJUnitPlatform()
+  useJUnitPlatform() // JUnit Platform 사용
 }
 
 checkstyle {
-  configDirectory = project.file('src/checkstyle')
-  configFile = file('src/checkstyle/nohttp-checkstyle.xml')
+  configDirectory = project.file('src/checkstyle') // Checkstyle 설정 파일 디렉토리
+  configFile = file('src/checkstyle/nohttp-checkstyle.xml') // Checkstyle 설정 파일
 }
 
 checkstyleNohttp {
@@ -84,17 +88,17 @@ checkstyleNohttp {
   configFile = file('src/checkstyle/nohttp-checkstyle.xml')
 }
 
-tasks.named("formatMain").configure { dependsOn("checkstyleMain") }
-tasks.named("formatMain").configure { dependsOn("checkstyleNohttp") }
+tasks.named("formatMain").configure { dependsOn("checkstyleMain") } // main 소스 포맷팅 시 checkstyleMain 의존성 추가
+tasks.named("formatMain").configure { dependsOn("checkstyleNohttp") } // main 소스 포맷팅 시 checkstyleNohttp 의존성 추가
 
-tasks.named("formatTest").configure { dependsOn("checkstyleTest") }
-tasks.named("formatTest").configure { dependsOn("checkstyleNohttp") }
+tasks.named("formatTest").configure { dependsOn("checkstyleTest") } // test 소스 포맷팅 시 checkstyleTest 의존성 추가
+tasks.named("formatTest").configure { dependsOn("checkstyleNohttp") } // test 소스 포맷팅 시 checkstyleNohttp 의존성 추가
 
-//checkstyleAot.enabled = false
-//checkstyleAotTest.enabled = false
+//checkstyleAot.enabled = false // AOT 관련 Checkstyle 비활성화 (현재 주석 처리됨)
+//checkstyleAotTest.enabled = false // AOT 테스트 관련 Checkstyle 비활성화 (현재 주석 처리됨)
 //
-//checkFormatAot.enabled = false
-//checkFormatAotTest.enabled = false
+//checkFormatAot.enabled = false // AOT 관련 포맷 검사 비활성화 (현재 주석 처리됨)
+//checkFormatAotTest.enabled = false // AOT 테스트 관련 포맷 검사 비활성화 (현재 주석 처리됨)
 //
-//formatAot.enabled = false
-//formatAotTest.enabled = false
+//formatAot.enabled = false // AOT 포맷팅 비활성화 (현재 주석 처리됨)
+//formatAotTest.enabled = false // AOT 테스트 포맷팅 비활성화 (현재 주석 처리됨)

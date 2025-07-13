@@ -16,16 +16,13 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
 /**
- * This filter illustrates how to conditionally skip retrieval. In some cases, retrieval
- * isn’t needed, such as when a user simply says "Hi". Additionally, only the clinic's
- * veterinarians are indexed in the Embedding Store.
  * <p>
- * To implement this, a custom {@link QueryRouter} is the simplest approach. When
- * retrieval is unnecessary, the QueryRouter returns an empty list, indicating that the
- * query won’t be routed to any {@link ContentRetriever}.
+ * 이 필터는 검색을 조건부로 건너뛰는 방법을 보여줍니다. 예를 들어, 사용자가 단순히 "안녕하세요"라고 말하는 경우처럼 검색이 필요하지 않은 경우가 있습니다.
+ * 또한, 클리닉의 수의사들만 임베딩 스토어에 색인되어 있습니다. 이를 구현하는 가장 간단한 방법은 사용자 정의 {@link QueryRouter}를 사용하는
+ * 것입니다. 검색이 불필요할 때, QueryRouter는 빈 리스트를 반환하여 쿼리가 어떤 {@link ContentRetriever}로도 라우팅되지 않음을
+ * 나타냅니다.
  * <p>
- * Decision-making relies on an LLM, which determines whether retrieval is needed based on
- * the user's query.
+ * 의사 결정은 LLM에 의존하며, LLM은 사용자 쿼리를 기반으로 검색이 필요한지 여부를 결정합니다.
  * <p>
  *
  * @see <a href=
@@ -35,12 +32,16 @@ class VetQueryRouter implements QueryRouter {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(VetQueryRouter.class);
 
+	// 다음 쿼리가 펫 클리닉의 한 명 이상의 수의사와 관련이 있습니까?
+	// '예' 또는 '아니오'로만 답변하세요.
+	// 쿼리: {{it}}
 	private static final PromptTemplate PROMPT_TEMPLATE = PromptTemplate.from("""
 			Is the following query related to one or more veterinarians of the pet clinic?
 			Answer only 'yes' or 'no'.
 			Query: {{it}}
 			""");
 
+	// 수의사 콘텐츠 검색기
 	private final ContentRetriever vetContentRetriever;
 
 	private final ChatLanguageModel chatLanguageModel;
@@ -52,10 +53,15 @@ class VetQueryRouter implements QueryRouter {
 
 	@Override
 	public Collection<ContentRetriever> route(Query query) {
-		Prompt prompt = PROMPT_TEMPLATE.apply(query.text());
+		Prompt prompt = PROMPT_TEMPLATE.apply(query.text()); // 쿼리 텍스트를 프롬프트 템플릿에 적용
 
-		AiMessage aiMessage = chatLanguageModel.chat(prompt.toUserMessage()).aiMessage();
-		LOGGER.debug("LLM decided: {}", aiMessage.text());
+		AiMessage aiMessage = chatLanguageModel.chat(prompt.toUserMessage()).aiMessage(); // LLM을
+																							// 사용하여
+																							// 채팅하고
+																							// AI
+																							// 메시지
+																							// 가져오기
+		LOGGER.debug("LLM decided: {}", aiMessage.text()); // LLM의 결정 로깅
 
 		if (aiMessage.text().toLowerCase().contains("yes")) {
 			return singletonList(vetContentRetriever);
